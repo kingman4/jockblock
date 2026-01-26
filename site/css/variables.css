@@ -1,0 +1,112 @@
+/**
+ * Jock Block Design System - CSS Variables
+ * Colors derived from product label: black, mint green, gold
+ */
+
+:root {
+  /* Primary - Dark Background (from label) */
+  --color-primary: #0A0A0A;
+  --color-primary-light: #1A1A1A;
+  --color-primary-dark: #000000;
+
+  /* Accent - Mint Green (from label "JOCK" text & tagline box) */
+  --color-accent: #00E676;
+  --color-accent-light: #69F0AE;
+  --color-accent-dark: #00C853;
+  --color-accent-glow: rgba(0, 230, 118, 0.3);
+
+  /* Secondary - Gold/Amber (from label "RELIEVES:" text) */
+  --color-secondary: #D4A853;
+  --color-secondary-light: #E8C87A;
+
+  /* Neutral */
+  --color-white: #FFFFFF;
+  --color-off-white: #F5F5F5;
+  --color-gray-100: #E0E0E0;
+  --color-gray-300: #9E9E9E;
+  --color-gray-500: #757575;
+  --color-gray-700: #424242;
+  --color-black: #0A0A0A;
+
+  /* Semantic */
+  --color-success: #00E676;
+  --color-error: #FF5252;
+  --color-warning: #D4A853;
+
+  /* Typography */
+  --font-heading: 'Bebas Neue', 'Oswald', sans-serif;
+  --font-subheading: 'Inter', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Type Scale - Mobile First */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-hero: 2rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px var(--color-accent-glow);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Z-index */
+  --z-dropdown: 10;
+  --z-sticky: 50;
+  --z-drawer: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+
+  /* Layout */
+  --max-width: 1200px;
+  --header-height: 64px;
+  --header-height-mobile: 56px;
+
+  /* Touch targets */
+  --touch-target-min: 44px;
+
+  /* Safe area insets */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Desktop type scale */
+@media (min-width: 1024px) {
+  :root {
+    --text-hero: 3.5rem;
+    --text-5xl: 3.5rem;
+    --text-4xl: 2.5rem;
+    --text-3xl: 2rem;
+  }
+}

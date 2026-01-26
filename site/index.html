@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jock Block - Natural homeopathic antifungal spray for jock itch, athlete's foot, and ringworm relief. Defense below the belt.">
+  <meta name="keywords" content="jock itch treatment, antifungal spray, ringworm treatment, natural antifungal, homeopathic">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Jock Block - Defense Below the Belt">
+  <meta property="og:description" content="Natural homeopathic antifungal spray for jock itch and ringworm">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jockblock.com">
+
+  <title>Jock Block - Defense Below the Belt | Antifungal Spray</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <!-- Mobile Menu Button -->
+      <button class="icon-btn mobile-menu-btn" data-testid="mobile-menu-button" aria-label="Open menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Logo -->
+      <a href="/" class="header-logo">
+        <span>JOCK</span> BLOCK
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav" data-testid="desktop-nav">
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#ingredients" class="nav-link">Ingredients</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button class="icon-btn cart-btn" data-testid="cart-icon" aria-label="Open cart">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="badge cart-badge" data-testid="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation -->
+  <div class="overlay" data-testid="mobile-nav-overlay"></div>
+  <nav class="mobile-nav" data-testid="mobile-nav">
+    <div class="mobile-nav-header">
+      <button class="icon-btn" data-testid="mobile-nav-close" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-nav-links">
+      <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+      <a href="#ingredients" class="mobile-nav-link">Ingredients</a>
+      <a href="#faq" class="mobile-nav-link">FAQ</a>
+      <a href="#contact" class="mobile-nav-link">Contact</a>
+    </div>
+    <div class="mobile-nav-footer">
+      <a href="#product" class="btn btn-primary btn-full">Shop Now</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="tagline-box">Defense Below the Belt</div>
+          <h1 class="hero-title">Natural Antifungal Relief</h1>
+          <p class="hero-subtitle">
+            Homeopathic spray for fast, effective relief from jock itch, athlete's foot, and ringworm.
+            Powered by natural sulfur.
+          </p>
+          <a href="#product" class="btn btn-primary btn-lg">Shop Now</a>
+        </div>
+        <div class="hero-image">
+          <!-- Placeholder product image -->
+          <div style="width: 300px; height: 400px; background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%); border: 2px solid var(--color-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+            <span style="font-family: var(--font-heading); font-size: 48px; color: var(--color-accent);">JOCK</span>
+            <span style="font-family: var(--font-heading); font-size: 48px; color: white;">BLOCK</span>
+            <span style="font-size: 14px; color: var(--color-gray-300);">Product Image</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Section -->
+    <section id="product" class="product-section" data-testid="product-section">
+      <div class="container">
+        <div class="product-grid">
+          <div class="product-image-wrapper">
+            <!-- Placeholder product image -->
+            <div class="product-image" style="width: 300px; height: 350px; background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%); border: 1px solid var(--color-gray-700); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px;">
+              <span style="font-family: var(--font-heading); font-size: 36px; color: var(--color-accent);">JOCK</span>
+              <span style="font-family: var(--font-heading); font-size: 36px; color: white;">BLOCK</span>
+              <span style="font-size: 12px; color: var(--color-gray-500);">60mL / 2.0 fl oz</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="section-label">Relieves:</span>
+            <h2 class="product-title">Jock Block 60mL</h2>
+            <div class="rating">
+              <span class="rating-stars">★★★★★</span>
+              <span class="rating-count">(124 reviews)</span>
+            </div>
+            <ul class="feature-list">
+              <li>Jock Itch</li>
+              <li>Athlete's Foot</li>
+              <li>Ringworm</li>
+            </ul>
+            <p class="product-description">
+              Fast-acting homeopathic antifungal spray with natural sulfur. Easy spray application
+              provides relief where you need it most.
+            </p>
+            <div class="price">$19.99</div>
+            <div class="product-actions">
+              <div class="quantity-selector">
+                <button class="quantity-btn" data-testid="quantity-decrease" aria-label="Decrease quantity">−</button>
+                <input type="number" class="quantity-input" value="1" min="1" max="10" data-testid="item-quantity" aria-label="Quantity">
+                <button class="quantity-btn" data-testid="quantity-increase" aria-label="Increase quantity">+</button>
+              </div>
+              <button class="btn btn-primary btn-lg" data-testid="add-to-cart">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Directions</span>
+          <h2 class="section-title">How It Works</h2>
+          <p class="section-subtitle">Three simple steps to relief</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Shake Well</h3>
+            <p class="step-description">
+              Shake the bottle to ensure even distribution of the natural sulfur formula.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Spray</h3>
+            <p class="step-description">
+              Clean and dry the affected area. Spray from 4-6 inches away.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Repeat</h3>
+            <p class="step-description">
+              Apply 2-3 times daily. Use for 2 weeks (jock itch/ringworm) or 4 weeks (athlete's foot).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredients Section -->
+    <section id="ingredients" class="ingredients-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">What's Inside</span>
+          <h2 class="section-title">Ingredients</h2>
+          <p class="section-subtitle">Simple, effective, natural</p>
+        </div>
+        <div class="ingredients-grid">
+          <div class="ingredient-card featured">
+            <h3 class="ingredient-name">Sulfur 6X HPUS</h3>
+            <p class="ingredient-purpose">Active Ingredient — Antifungal</p>
+          </div>
+          <div class="ingredient-card">
+            <h3 class="ingredient-name">Mineral Oil</h3>
+            <p class="ingredient-purpose">Inactive — Carrier & Moisturizer</p>
+          </div>
+          <div class="ingredient-card">
+            <h3 class="ingredient-name">Water</h3>
+            <p class="ingredient-purpose">Inactive — Base Solution</p>
+          </div>
+        </div>
+        <p style="text-align: center; margin-top: var(--space-6); font-size: var(--text-sm); color: var(--color-gray-500);">
+          HPUS = Homeopathic Pharmacopoeia of the U.S.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Questions?</span>
+          <h2 class="section-title">FAQ</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How long until I see results?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">
+                Most users notice improvement within 3-5 days of consistent use. For jock itch and ringworm,
+                continue use for 2 weeks. For athlete's foot, continue for 4 weeks for best results.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Is it safe to use daily?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">
+                Yes, Jock Block is designed for daily use. Apply 2-3 times per day to the affected area.
+                If irritation increases or the condition worsens after 2 weeks, discontinue use and consult a doctor.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What makes it different from other antifungals?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">
+                Jock Block uses a homeopathic approach with natural sulfur (Sulfur 6X HPUS) as the active ingredient.
+                The easy spray application makes it convenient and mess-free compared to creams and powders.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Can I use it on sensitive areas?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">
+                For external use only. Avoid contact with eyes, mouth, and mucous membranes.
+                Do not use on children under 2 years unless directed by a doctor. Mild skin irritation may occur.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Do I need to shake it before use?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">
+                Yes! Always shake well before each use. The formula contains mineral oil and water which can
+                separate. Shaking ensures the sulfur is evenly distributed for consistent application.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="ingredients-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Get in Touch</span>
+          <h2 class="section-title">Contact Us</h2>
+          <p class="section-subtitle">Questions? We're here to help.</p>
+        </div>
+        <form class="card" style="max-width: 500px; margin: 0 auto;" data-testid="contact-form">
+          <!-- Honeypot field (hidden from users, catches bots) -->
+          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off">
+
+          <div class="form-group">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" id="name" name="name" class="form-input" required placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-input" required placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label for="message" class="form-label">Message</label>
+            <textarea id="message" name="message" class="form-input" rows="4" required placeholder="How can we help?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" data-testid="submit-button">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo"><span>JOCK</span> BLOCK</div>
+          <p class="footer-tagline">Defense Below the Belt</p>
+        </div>
+        <div>
+          <h4 class="footer-heading">Shop</h4>
+          <nav class="footer-links">
+            <a href="#product" class="footer-link">Buy Jock Block</a>
+            <a href="#how-it-works" class="footer-link">How It Works</a>
+            <a href="#ingredients" class="footer-link">Ingredients</a>
+          </nav>
+        </div>
+        <div>
+          <h4 class="footer-heading">Support</h4>
+          <nav class="footer-links">
+            <a href="#faq" class="footer-link">FAQ</a>
+            <a href="#contact" class="footer-link">Contact</a>
+            <a href="/returns.html" class="footer-link">Returns</a>
+          </nav>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclaimer">
+          *DISCLAIMER: This homeopathic product has not been evaluated by FDA for safety or efficacy.
+          FDA is not aware of scientific evidence to support homeopathy as effective.
+        </p>
+        <p class="footer-copyright">
+          © 2026 Jock Block. All rights reserved. NDC: XXXXX-001-60
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div class="overlay" data-testid="cart-overlay"></div>
+  <aside class="cart-drawer" data-testid="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2 class="cart-drawer-title">Your Cart (<span data-testid="cart-drawer-count">0</span>)</h2>
+      <button class="icon-btn" data-testid="cart-close" aria-label="Close cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="cart-drawer-body">
+      <div class="cart-empty" data-testid="empty-cart-message">
+        <p>Your cart is empty</p>
+        <a href="#product" class="btn btn-secondary" style="margin-top: var(--space-4);">Shop Now</a>
+      </div>
+      <div class="cart-items" data-testid="cart-items" style="display: none;">
+        <!-- Cart items will be inserted here by JavaScript -->
+      </div>
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span data-testid="cart-total">$0.00</span>
+      </div>
+      <button class="btn btn-primary btn-full" data-testid="checkout-button">Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Sticky Add to Cart (Mobile) -->
+  <div class="sticky-atc" data-testid="sticky-atc">
+    <span class="sticky-atc-price">$19.99</span>
+    <button class="btn btn-primary" data-testid="sticky-add-to-cart">Add to Cart</button>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
