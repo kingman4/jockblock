@@ -164,14 +164,7 @@ function setupCart() {
   stickyAddToCart?.addEventListener('click', handleAddToCart);
 
   // Checkout
-  checkoutBtn?.addEventListener('click', () => {
-    if (cart.isEmpty()) {
-      alert('Your cart is empty!');
-      return;
-    }
-    // In production, this would redirect to Stripe Checkout
-    alert('Redirecting to checkout... (Stripe integration pending)');
-  });
+  checkoutBtn?.addEventListener('click', handleCheckout);
 }
 
 /**
@@ -404,6 +397,52 @@ function setupSmoothScroll() {
       }
     });
   });
+}
+
+/**
+ * Handle Checkout - Create Stripe Checkout Session
+ */
+async function handleCheckout() {
+  if (cart.isEmpty()) {
+    alert('Your cart is empty!');
+    return;
+  }
+
+  const checkoutBtn = elements.checkoutBtn;
+  const originalText = checkoutBtn.textContent;
+
+  try {
+    // Update UI
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Processing...';
+
+    // Get total quantity from cart
+    const quantity = cart.getItemCount();
+
+    // Call serverless function to create Stripe session
+    const response = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ quantity })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create checkout session');
+    }
+
+    const { url } = await response.json();
+
+    // Redirect to Stripe Checkout
+    window.location.href = url;
+
+  } catch (error) {
+    console.error('Checkout error:', error);
+    alert('There was a problem starting checkout. Please try again.');
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = originalText;
+  }
 }
 
 // iOS viewport height fix

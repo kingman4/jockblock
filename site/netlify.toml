@@ -1,0 +1,60 @@
+# Netlify Configuration for Jock Block
+
+[build]
+  # Directory containing the site source code
+  publish = "."
+  # Build command (if needed)
+  command = "npm install"
+  # Functions directory
+  functions = "netlify/functions"
+
+[build.environment]
+  # Node version for functions
+  NODE_VERSION = "18"
+
+# Redirects for SPA-style routing (if needed in the future)
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Content Security Policy
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://api.stripe.com https://checkout.stripe.com; frame-src https://js.stripe.com https://hooks.stripe.com;"
+
+# Cache static assets
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Functions configuration
+[functions]
+  # Use esbuild for faster builds
+  node_bundler = "esbuild"
+
+# Dev server settings (for netlify dev)
+[dev]
+  command = "npx serve . -p 3000"
+  port = 8888
+  targetPort = 3000
+  publish = "."
+  autoLaunch = false

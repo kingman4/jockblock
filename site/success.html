@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Thank you for your order - Jock Block">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Order Confirmed - Jock Block</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+
+  <style>
+    .success-page {
+      min-height: calc(100vh - var(--header-height-mobile) - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8) var(--space-4);
+    }
+
+    @media (min-width: 768px) {
+      .success-page {
+        min-height: calc(100vh - var(--header-height-desktop) - 200px);
+      }
+    }
+
+    .success-card {
+      background: var(--color-primary-light);
+      border: 1px solid var(--color-gray-700);
+      border-radius: 12px;
+      padding: var(--space-8);
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-6);
+    }
+
+    .success-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--color-primary);
+      stroke-width: 3;
+    }
+
+    .success-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-3xl);
+      color: var(--color-white);
+      margin-bottom: var(--space-4);
+    }
+
+    .success-message {
+      color: var(--color-gray-300);
+      margin-bottom: var(--space-6);
+      line-height: 1.6;
+    }
+
+    .order-id {
+      background: var(--color-primary);
+      border: 1px solid var(--color-gray-600);
+      border-radius: 8px;
+      padding: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .order-id-label {
+      font-size: var(--text-sm);
+      color: var(--color-gray-400);
+      margin-bottom: var(--space-1);
+    }
+
+    .order-id-value {
+      font-family: monospace;
+      font-size: var(--text-sm);
+      color: var(--color-accent);
+      word-break: break-all;
+    }
+
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    @media (min-width: 480px) {
+      .success-actions {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--color-gray-700);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="/" class="header-logo" style="margin: 0 auto;">
+        <span>JOCK</span> BLOCK
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main success-page">
+    <div class="success-card" id="success-content">
+      <!-- Loading state shown initially -->
+      <div class="loading-state" id="loading-state">
+        <div class="spinner"></div>
+        <p style="color: var(--color-gray-400);">Confirming your order...</p>
+      </div>
+
+      <!-- Success content (hidden initially) -->
+      <div id="confirmed-state" style="display: none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+
+        <h1 class="success-title">Order Confirmed!</h1>
+
+        <p class="success-message">
+          Thank you for your purchase! We've sent a confirmation email with your order details.
+          Your Jock Block will ship within 1-2 business days.
+        </p>
+
+        <div class="order-id" id="order-details">
+          <div class="order-id-label">Order Reference</div>
+          <div class="order-id-value" id="order-id">—</div>
+        </div>
+
+        <div class="success-actions">
+          <a href="/" class="btn btn-primary">Continue Shopping</a>
+          <a href="mailto:support@jockblock.com" class="btn btn-secondary">Contact Support</a>
+        </div>
+      </div>
+
+      <!-- Error state (hidden initially) -->
+      <div id="error-state" style="display: none;">
+        <div class="success-icon" style="background: var(--color-error, #ef4444);">
+          <svg viewBox="0 0 24 24" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+
+        <h1 class="success-title">Something Went Wrong</h1>
+
+        <p class="success-message">
+          We couldn't verify your order. If you were charged, please contact support with your payment details.
+        </p>
+
+        <div class="success-actions">
+          <a href="/" class="btn btn-primary">Return Home</a>
+          <a href="mailto:support@jockblock.com" class="btn btn-secondary">Contact Support</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p class="footer-copyright">
+          © 2026 Jock Block. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    // Clear cart on successful checkout
+    function clearCart() {
+      localStorage.removeItem('jockblock_cart');
+    }
+
+    // Get session ID from URL
+    function getSessionId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('session_id');
+    }
+
+    // Show appropriate state
+    function showState(state) {
+      document.getElementById('loading-state').style.display = state === 'loading' ? 'flex' : 'none';
+      document.getElementById('confirmed-state').style.display = state === 'confirmed' ? 'block' : 'none';
+      document.getElementById('error-state').style.display = state === 'error' ? 'block' : 'none';
+    }
+
+    // Initialize page
+    async function init() {
+      const sessionId = getSessionId();
+
+      if (!sessionId) {
+        // No session ID - probably direct navigation
+        showState('error');
+        return;
+      }
+
+      // For now, just show success since we have a session ID
+      // In production, you could verify the session with Stripe
+      setTimeout(() => {
+        // Clear the cart
+        clearCart();
+
+        // Show order ID (truncated session ID for reference)
+        document.getElementById('order-id').textContent = sessionId.substring(0, 32) + '...';
+
+        // Show success state
+        showState('confirmed');
+      }, 1000);
+    }
+
+    // Run on page load
+    init();
+  </script>
+</body>
+</html>
