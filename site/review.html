@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Leave a review for Jock Block">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>Leave a Review - Jock Block</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+
+  <style>
+    .review-page {
+      min-height: calc(100vh - var(--header-height-mobile) - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8) var(--space-4);
+    }
+
+    @media (min-width: 768px) {
+      .review-page {
+        min-height: calc(100vh - var(--header-height-desktop) - 200px);
+      }
+    }
+
+    .review-card {
+      background: var(--color-primary-light);
+      border: 1px solid var(--color-gray-700);
+      border-radius: 12px;
+      padding: var(--space-8);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .review-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-2xl);
+      color: var(--color-white);
+      margin-bottom: var(--space-2);
+      text-align: center;
+    }
+
+    .review-subtitle {
+      color: var(--color-gray-400);
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+      color: var(--color-gray-600);
+      transition: color 0.15s ease, transform 0.15s ease;
+      padding: 4px;
+    }
+
+    .star-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .star-btn.active {
+      color: var(--color-secondary);
+    }
+
+    .star-btn:focus {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .rating-label {
+      text-align: center;
+      color: var(--color-gray-300);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-6);
+      min-height: 20px;
+    }
+
+    .review-form .form-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .char-count {
+      font-size: var(--text-xs);
+      color: var(--color-gray-500);
+      text-align: right;
+      margin-top: var(--space-1);
+    }
+
+    .success-message {
+      text-align: center;
+      padding: var(--space-8) var(--space-4);
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+    }
+
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--color-primary);
+      stroke-width: 3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="/" class="header-logo" style="margin: 0 auto;">
+        <span>JOCK</span> BLOCK
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main review-page">
+    <div class="review-card">
+      <!-- Review Form -->
+      <div id="review-form-container">
+        <h1 class="review-title">How was your experience?</h1>
+        <p class="review-subtitle">Your feedback helps others make informed decisions.</p>
+
+        <form id="review-form" name="reviews" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="reviews">
+          <input type="text" name="bot-field" class="hp-field" tabindex="-1" autocomplete="off">
+
+          <!-- Star Rating -->
+          <div class="star-rating" role="radiogroup" aria-label="Rating">
+            <button type="button" class="star-btn" data-rating="1" aria-label="1 star">★</button>
+            <button type="button" class="star-btn" data-rating="2" aria-label="2 stars">★</button>
+            <button type="button" class="star-btn" data-rating="3" aria-label="3 stars">★</button>
+            <button type="button" class="star-btn" data-rating="4" aria-label="4 stars">★</button>
+            <button type="button" class="star-btn" data-rating="5" aria-label="5 stars">★</button>
+          </div>
+          <div class="rating-label" id="rating-label"></div>
+          <input type="hidden" name="rating" id="rating-input" required>
+
+          <!-- Name -->
+          <div class="form-group">
+            <label for="reviewer-name" class="form-label">Name (displayed with review)</label>
+            <input type="text" id="reviewer-name" name="name" class="form-input" required placeholder="John D.">
+          </div>
+
+          <!-- Review Text -->
+          <div class="form-group">
+            <label for="review-text" class="form-label">Your Review</label>
+            <textarea id="review-text" name="review" class="form-input" rows="4" required placeholder="Tell us about your experience..." maxlength="500"></textarea>
+            <div class="char-count"><span id="char-count">0</span>/500</div>
+          </div>
+
+          <!-- Verified Purchase (optional) -->
+          <div class="form-group">
+            <label for="order-email" class="form-label">Order Email (optional, for verification)</label>
+            <input type="email" id="order-email" name="email" class="form-input" placeholder="you@example.com">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="submit-btn">Submit Review</button>
+        </form>
+      </div>
+
+      <!-- Success Message (hidden initially) -->
+      <div id="success-message" class="success-message" style="display: none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2 class="review-title">Thank You!</h2>
+        <p class="review-subtitle">Your review has been submitted and will be published after moderation.</p>
+        <a href="/" class="btn btn-primary" style="margin-top: var(--space-4);">Back to Home</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+        <p class="footer-copyright">
+          © 2026 Jock Block. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const ratingLabels = {
+      1: 'Poor',
+      2: 'Fair',
+      3: 'Good',
+      4: 'Very Good',
+      5: 'Excellent'
+    };
+
+    const starButtons = document.querySelectorAll('.star-btn');
+    const ratingInput = document.getElementById('rating-input');
+    const ratingLabel = document.getElementById('rating-label');
+    const reviewText = document.getElementById('review-text');
+    const charCount = document.getElementById('char-count');
+    const form = document.getElementById('review-form');
+    const formContainer = document.getElementById('review-form-container');
+    const successMessage = document.getElementById('success-message');
+
+    // Star rating interaction
+    starButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rating = parseInt(btn.dataset.rating);
+        ratingInput.value = rating;
+        ratingLabel.textContent = ratingLabels[rating];
+
+        // Update star visuals
+        starButtons.forEach(star => {
+          const starRating = parseInt(star.dataset.rating);
+          star.classList.toggle('active', starRating <= rating);
+        });
+      });
+
+      // Hover preview
+      btn.addEventListener('mouseenter', () => {
+        const rating = parseInt(btn.dataset.rating);
+        starButtons.forEach(star => {
+          const starRating = parseInt(star.dataset.rating);
+          star.style.color = starRating <= rating ? 'var(--color-secondary)' : '';
+        });
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        starButtons.forEach(star => {
+          star.style.color = '';
+        });
+      });
+    });
+
+    // Character count
+    reviewText.addEventListener('input', () => {
+      charCount.textContent = reviewText.value.length;
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!ratingInput.value) {
+        alert('Please select a star rating');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString()
+        });
+
+        if (response.ok) {
+          formContainer.style.display = 'none';
+          successMessage.style.display = 'block';
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (error) {
+        console.error('Review submission error:', error);
+        alert('There was a problem submitting your review. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Review';
+      }
+    });
+  </script>
+</body>
+</html>
