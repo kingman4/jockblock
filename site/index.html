@@ -300,9 +300,10 @@
           <h2 class="section-title">Contact Us</h2>
           <p class="section-subtitle">Questions? We're here to help.</p>
         </div>
-        <form class="card" style="max-width: 500px; margin: 0 auto;" data-testid="contact-form">
-          <!-- Honeypot field (hidden from users, catches bots) -->
-          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off">
+        <form class="card" style="max-width: 500px; margin: 0 auto;" data-testid="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <!-- Netlify honeypot field (hidden from users, catches bots) -->
+          <input type="hidden" name="form-name" value="contact">
+          <input type="text" name="bot-field" class="hp-field" tabindex="-1" autocomplete="off">
 
           <div class="form-group">
             <label for="name" class="form-label">Name</label>

@@ -328,7 +328,7 @@ function setupContactForm() {
       name: contactForm.querySelector('#name').value,
       email: contactForm.querySelector('#email').value,
       message: contactForm.querySelector('#message').value,
-      honeypot: contactForm.querySelector('[name="website"]').value
+      honeypot: contactForm.querySelector('[name="bot-field"]')?.value || ''
     };
 
     // Clear previous errors
@@ -360,18 +360,31 @@ function setupContactForm() {
       return;
     }
 
-    // Submit (in production, this would POST to an API)
+    // Submit to Netlify Forms
     const submitBtn = contactForm.querySelector('[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
-    // Simulate API call
-    setTimeout(() => {
-      alert('Message sent! We\'ll get back to you soon.');
-      contactForm.reset();
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(contactForm)).toString()
+      });
+
+      if (response.ok) {
+        alert('Message sent! We\'ll get back to you soon.');
+        contactForm.reset();
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Form error:', error);
+      alert('There was a problem sending your message. Please try again.');
+    } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Send Message';
-    }, 1000);
+    }
   });
 }
 
