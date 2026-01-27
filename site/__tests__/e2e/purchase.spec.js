@@ -17,7 +17,7 @@ test.describe('Purchase Flow', () => {
 
   test('hero section is visible', async ({ page }) => {
     await expect(page.locator('.hero')).toBeVisible();
-    await expect(page.locator('.tagline-box')).toContainText('Defense Below the Belt');
+    await expect(page.locator('.hero-title')).toContainText('Defense Below the Belt');
   });
 
   test('add to cart button works', async ({ page }) => {
