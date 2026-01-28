@@ -1,11 +1,11 @@
 /**
- * E2E Tests - Mobile Experience (iPhone)
+ * E2E Tests - Mobile Experience
  */
 
 import { test, expect, devices } from '@playwright/test';
 
-// Set device at top level, outside describe block
-test.use({ ...devices['iPhone 13'] });
+// Use Pixel 5 (Chromium-based) for CI compatibility
+test.use({ ...devices['Pixel 5'] });
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
