@@ -463,10 +463,13 @@ async function handleCheckout() {
  * Load and Display Reviews
  */
 async function setupReviews() {
+  const reviewsSection = document.querySelector('#reviews');
   const reviewsGrid = document.querySelector('[data-testid="reviews-grid"]');
-  const reviewsEmpty = document.querySelector('[data-testid="reviews-empty"]');
 
-  if (!reviewsGrid) return;
+  if (!reviewsSection || !reviewsGrid) return;
+
+  // Hide section by default until we know there are reviews
+  reviewsSection.style.display = 'none';
 
   try {
     // Try API first (production), fall back to static JSON (development)
@@ -490,11 +493,13 @@ async function setupReviews() {
       }
     }
 
+    // Only show section if there are reviews
     if (reviews.length === 0) {
-      reviewsGrid.style.display = 'none';
-      if (reviewsEmpty) reviewsEmpty.style.display = 'block';
       return;
     }
+
+    // Show the section
+    reviewsSection.style.display = '';
 
     // Sort by date (newest first) and take top 6
     const displayReviews = reviews
@@ -522,8 +527,7 @@ async function setupReviews() {
 
   } catch (error) {
     console.error('Error loading reviews:', error);
-    reviewsGrid.style.display = 'none';
-    if (reviewsEmpty) reviewsEmpty.style.display = 'block';
+    // Keep section hidden on error
   }
 }
 

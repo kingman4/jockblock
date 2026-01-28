@@ -8,22 +8,23 @@ test.describe('Reviews Section', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    // Wait for reviews section to become visible (hidden by default until reviews load)
+    await page.waitForSelector('#reviews:not([style*="display: none"])', { timeout: 5000 });
   });
 
-  test('reviews section is visible on homepage', async ({ page }) => {
+  test('reviews section is visible when reviews exist', async ({ page }) => {
     const reviewsSection = page.locator('#reviews');
     await expect(reviewsSection).toBeVisible();
     await expect(page.locator('.reviews-section .section-title')).toContainText('Reviews');
   });
 
   test('reviews grid displays review cards', async ({ page }) => {
-    // Wait for reviews to load (from static JSON in dev)
     const reviewsGrid = page.locator('[data-testid="reviews-grid"]');
     await expect(reviewsGrid).toBeVisible();
 
     // Should have review cards (from sample data)
     const reviewCards = page.locator('.review-card');
-    await expect(reviewCards.first()).toBeVisible({ timeout: 5000 });
+    await expect(reviewCards.first()).toBeVisible();
 
     // Should have at least one review
     const count = await reviewCards.count();
@@ -187,16 +188,24 @@ test.describe('Review Submission Page', () => {
   });
 });
 
-test.describe('Reviews Empty State', () => {
-  test('empty state is hidden when reviews exist', async ({ page }) => {
+test.describe('Reviews Section Visibility', () => {
+  test('reviews section is hidden when no reviews exist', async ({ page }) => {
+    // Mock empty reviews by intercepting the API call
+    await page.route('**/.netlify/functions/get-reviews', route => {
+      route.fulfill({ status: 200, body: JSON.stringify({ reviews: [] }) });
+    });
+    await page.route('**/data/reviews.json', route => {
+      route.fulfill({ status: 200, body: JSON.stringify({ reviews: [] }) });
+    });
+
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    // Wait for reviews to load
-    await page.waitForSelector('.review-card', { timeout: 5000 });
+    // Give time for JS to run
+    await page.waitForTimeout(1000);
 
-    // Empty state should be hidden
-    const emptyState = page.locator('[data-testid="reviews-empty"]');
-    await expect(emptyState).not.toBeVisible();
+    // Reviews section should be hidden
+    const reviewsSection = page.locator('#reviews');
+    await expect(reviewsSection).toBeHidden();
   });
 });
