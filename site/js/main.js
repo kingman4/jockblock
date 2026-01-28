@@ -10,8 +10,8 @@ const cart = new Cart();
 
 // Product data
 const PRODUCT = {
-  id: 'jockblock-60ml',
-  name: 'Jock Block 60mL',
+  id: 'jockblock-100ml',
+  name: 'Jock Block 100mL',
   price: 19.99
 };
 

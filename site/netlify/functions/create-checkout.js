@@ -10,7 +10,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // Product configuration
 const PRODUCT = {
   name: 'Jock Block Antifungal Spray',
-  description: 'Homeopathic antifungal spray with Sulfur 6X HPUS - 60mL',
+  description: 'Homeopathic antifungal spray with Sulfur 6X HPUS - 100mL',
   price: parseInt(process.env.STRIPE_PRICE_AMOUNT) || 1999, // cents
   currency: 'usd',
   image: 'https://jockblock.com/images/product-main.png' // Update with actual image URL
