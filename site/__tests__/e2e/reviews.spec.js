@@ -96,7 +96,7 @@ test.describe('Review Submission Page', () => {
 
   test('review page loads correctly', async ({ page }) => {
     await expect(page).toHaveTitle(/Leave a Review/);
-    await expect(page.locator('.review-title')).toContainText('How was your experience?');
+    await expect(page.locator('#review-form-container .review-title')).toContainText('How was your experience?');
   });
 
   test('star rating selector is interactive', async ({ page }) => {
