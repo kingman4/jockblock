@@ -322,8 +322,19 @@ function setupContactForm() {
   const { contactForm } = elements;
   if (!contactForm) return;
 
+  // Record form load time for bot detection
+  const formLoadTime = Date.now();
+  const MIN_SUBMIT_TIME_MS = 3000; // Minimum 3 seconds before submission
+
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // Time-based bot check: reject if submitted too quickly
+    const timeSinceLoad = Date.now() - formLoadTime;
+    if (timeSinceLoad < MIN_SUBMIT_TIME_MS) {
+      console.log('Bot detected: form submitted too quickly');
+      return;
+    }
 
     const formData = {
       name: contactForm.querySelector('#name').value,
