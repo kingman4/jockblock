@@ -64,6 +64,7 @@ function init() {
   setupContactForm();
   setupSmoothScroll();
   setupHeroBackground();
+  setupReviews();
   updateCartUI();
 
   // Enable transitions after page load to prevent flash of animating elements
@@ -456,6 +457,91 @@ async function handleCheckout() {
     checkoutBtn.disabled = false;
     checkoutBtn.textContent = originalText;
   }
+}
+
+/**
+ * Load and Display Reviews
+ */
+async function setupReviews() {
+  const reviewsGrid = document.querySelector('[data-testid="reviews-grid"]');
+  const reviewsEmpty = document.querySelector('[data-testid="reviews-empty"]');
+
+  if (!reviewsGrid) return;
+
+  try {
+    // Try API first (production), fall back to static JSON (development)
+    let reviews = [];
+    try {
+      const apiResponse = await fetch('/.netlify/functions/get-reviews');
+      if (apiResponse.ok) {
+        const apiData = await apiResponse.json();
+        reviews = apiData.reviews || [];
+      }
+    } catch (e) {
+      console.log('API not available, trying static JSON');
+    }
+
+    // Fallback to static JSON for local development
+    if (reviews.length === 0) {
+      const jsonResponse = await fetch('/data/reviews.json');
+      if (jsonResponse.ok) {
+        const jsonData = await jsonResponse.json();
+        reviews = jsonData.reviews || [];
+      }
+    }
+
+    if (reviews.length === 0) {
+      reviewsGrid.style.display = 'none';
+      if (reviewsEmpty) reviewsEmpty.style.display = 'block';
+      return;
+    }
+
+    // Sort by date (newest first) and take top 6
+    const displayReviews = reviews
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 6);
+
+    reviewsGrid.innerHTML = displayReviews.map(review => `
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+          <span class="review-date">${formatDate(review.date)}</span>
+        </div>
+        <p class="review-text">${escapeHtml(review.review)}</p>
+        <div class="review-author">
+          <span class="review-name">${escapeHtml(review.name)}</span>
+          ${review.verified ? `
+            <span class="review-verified">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+              Verified
+            </span>
+          ` : ''}
+        </div>
+      </div>
+    `).join('');
+
+  } catch (error) {
+    console.error('Error loading reviews:', error);
+    reviewsGrid.style.display = 'none';
+    if (reviewsEmpty) reviewsEmpty.style.display = 'block';
+  }
+}
+
+/**
+ * Format date for display
+ */
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // iOS viewport height fix

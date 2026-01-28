@@ -1,0 +1,28 @@
+{
+  "reviews": [
+    {
+      "id": "1",
+      "rating": 5,
+      "name": "Mike T.",
+      "review": "Finally something that works! I've tried creams and powders but the spray is so much easier to apply. Noticed relief within a few days.",
+      "date": "2026-01-15",
+      "verified": true
+    },
+    {
+      "id": "2",
+      "rating": 4,
+      "name": "Jason R.",
+      "review": "Good product, easy to use. The spray bottle works well and doesn't make a mess. Would recommend shaking it well before each use.",
+      "date": "2026-01-10",
+      "verified": true
+    },
+    {
+      "id": "3",
+      "rating": 5,
+      "name": "David L.",
+      "review": "Been dealing with athlete's foot for months. This spray helped relieve the itching and burning. Will definitely buy again.",
+      "date": "2026-01-05",
+      "verified": true
+    }
+  ]
+}
