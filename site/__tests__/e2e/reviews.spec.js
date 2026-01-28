@@ -84,7 +84,7 @@ test.describe('Reviews Section', () => {
 
     // Click and verify navigation
     await reviewLink.click();
-    await expect(page).toHaveURL(/\/review\.html/);
+    await expect(page).toHaveURL(/\/review(\.html)?$/);
   });
 });
 
