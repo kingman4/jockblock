@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block internal paths
+Disallow: /.netlify/
+Disallow: /success.html
+Disallow: /data/
+
+Sitemap: https://jockblock.com/sitemap.xml
