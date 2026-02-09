@@ -13,7 +13,7 @@
     "test:e2e:headed": "playwright test --project=chromium --headed",
     "test:a11y": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=accessibility",
     "dev": "npx serve . -p 3000",
-    "build": "echo 'Static site - no build needed'",
+    "build": "node scripts/build-config.js",
     "lint": "eslint js/**/*.js"
   },
   "keywords": [
