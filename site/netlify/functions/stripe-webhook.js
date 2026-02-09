@@ -12,6 +12,99 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@jockblock.com';
 const SITE_URL = process.env.SITE_URL || 'https://jockblock.com';
 
+// Presale configuration (server-side env var for accurate date checking)
+const MARKET_DATE = process.env.MARKET_DATE; // Format: YYYY-MM-DD
+
+/**
+ * Check if we're currently in presale mode
+ */
+function isPresaleMode() {
+  if (!MARKET_DATE) return false;
+  const marketDate = new Date(MARKET_DATE + 'T00:00:00Z');
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  return today <= marketDate;
+}
+
+/**
+ * Format market date for display
+ */
+function formatMarketDate() {
+  if (!MARKET_DATE) return '';
+  const date = new Date(MARKET_DATE + 'T00:00:00Z');
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+/**
+ * Send presale order confirmation email
+ */
+async function sendPresaleConfirmationEmail(customerEmail, customerName) {
+  const shippingDate = formatMarketDate();
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: customerEmail,
+      subject: 'Your Jock Block Pre-order is Confirmed! 🎉',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-size: 28px; margin: 0;">
+              <span style="color: #00E676;">JOCK</span> <span style="color: #333;">BLOCK</span>
+            </h1>
+          </div>
+
+          <p>Hi${customerName ? ` ${customerName}` : ''},</p>
+
+          <p><strong>Thank you for your pre-order!</strong></p>
+
+          <p>You're one of our early supporters, and we truly appreciate it. Your order has been confirmed and will ship on:</p>
+
+          <div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #D4A853; border-radius: 8px;">
+            <p style="margin: 0; font-size: 24px; font-weight: bold; color: #000;">
+              ${shippingDate}
+            </p>
+          </div>
+
+          <p>We'll send you a shipping confirmation email with tracking information as soon as your order is on its way.</p>
+
+          <p>In the meantime, if you have any questions, feel free to reach out via our <a href="${SITE_URL}/#contact" style="color: #00E676;">contact page</a>.</p>
+
+          <p>
+            Thanks for believing in us,<br>
+            The Jock Block Team
+          </p>
+
+          <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+          <p style="font-size: 12px; color: #666;">
+            This is a pre-order confirmation. Your card has been charged and your order will ship on ${shippingDate}.
+          </p>
+        </body>
+        </html>
+      `
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Failed to send presale email: ${error}`);
+  }
+
+  return response.json();
+}
+
 /**
  * Send review request email via Resend
  */
@@ -142,6 +235,17 @@ exports.handler = async (event) => {
       const orderId = session.id;
 
       if (customerEmail) {
+        // Send presale confirmation if in presale mode
+        if (isPresaleMode()) {
+          try {
+            await sendPresaleConfirmationEmail(customerEmail, customerName);
+            console.log(`Presale confirmation sent to ${customerEmail} (Order: ${orderId})`);
+          } catch (error) {
+            console.error(`Failed to send presale email to ${customerEmail}:`, error);
+          }
+        }
+
+        // Schedule review request email (will be sent later)
         await scheduleReviewEmail(customerEmail, customerName, orderId);
       } else {
         console.log('No customer email found in session');
