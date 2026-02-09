@@ -375,3 +375,21 @@
   opacity: 1;
   visibility: visible;
 }
+
+/* ============================================
+   PRESALE
+   ============================================ */
+
+.presale-message {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-secondary);
+  color: var(--color-black);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.presale-message strong {
+  font-weight: 700;
+}

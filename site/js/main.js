@@ -4,9 +4,30 @@
 
 import { Cart } from './cart.js';
 import { validateForm } from './form-validation.js';
+import { MARKET_DATE } from './site-config.js';
 
 // Initialize cart
 const cart = new Cart();
+
+/**
+ * Check if site is in presale mode
+ */
+function isPresaleMode() {
+  if (!MARKET_DATE) return false;
+  const marketDate = new Date(MARKET_DATE + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today <= marketDate;
+}
+
+/**
+ * Format date for display (e.g., "March 1, 2026")
+ */
+function formatMarketDate() {
+  if (!MARKET_DATE) return '';
+  const date = new Date(MARKET_DATE + 'T00:00:00');
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
 
 // Product data
 const PRODUCT = {
@@ -65,12 +86,47 @@ function init() {
   setupSmoothScroll();
   setupHeroBackground();
   setupReviews();
+  setupPresale();
   updateCartUI();
 
   // Enable transitions after page load to prevent flash of animating elements
   requestAnimationFrame(() => {
     document.body.classList.add('transitions-ready');
   });
+}
+
+/**
+ * Setup Presale Mode
+ * Changes button text and adds shipping date message
+ */
+function setupPresale() {
+  if (!isPresaleMode()) return;
+
+  const { addToCartBtn, stickyAddToCart } = elements;
+  const shippingDate = formatMarketDate();
+
+  // Update button text
+  if (addToCartBtn) {
+    addToCartBtn.textContent = 'Pre-order Now';
+    addToCartBtn.setAttribute('data-presale', 'true');
+  }
+
+  if (stickyAddToCart) {
+    stickyAddToCart.textContent = 'Pre-order Now';
+    stickyAddToCart.setAttribute('data-presale', 'true');
+  }
+
+  // Add presale message below the add to cart button
+  if (addToCartBtn) {
+    const presaleMessage = document.createElement('p');
+    presaleMessage.className = 'presale-message';
+    presaleMessage.setAttribute('data-testid', 'presale-message');
+    presaleMessage.innerHTML = `<strong>Pre-order:</strong> Ships on ${shippingDate}`;
+    addToCartBtn.parentNode.insertBefore(presaleMessage, addToCartBtn.nextSibling);
+  }
+
+  // Add class to body for any additional styling
+  document.body.classList.add('presale-mode');
 }
 
 /**
