@@ -602,7 +602,8 @@ async function setupReviews() {
  * Format date for display
  */
 function formatDate(dateString) {
-  const date = new Date(dateString);
+  // Append time component to avoid UTC parsing shifting the date in negative-offset timezones
+  const date = new Date(dateString + 'T00:00:00');
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
