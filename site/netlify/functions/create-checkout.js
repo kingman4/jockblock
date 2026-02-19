@@ -16,14 +16,27 @@ const PRODUCT = {
   image: 'https://jockblock.com/images/product-main.png' // Update with actual image URL
 };
 
-// CORS headers for local development and production
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS'
-};
+// Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  'https://jockblock.com',
+  'https://www.jockblock.com',
+  'http://localhost:3000',
+  'http://localhost:8888'
+];
+
+function getCorsHeaders(origin) {
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+  };
+}
 
 exports.handler = async (event, context) => {
+  const origin = event.headers.origin || event.headers.Origin || '';
+  const headers = getCorsHeaders(origin);
+
   // Handle preflight CORS requests
   if (event.httpMethod === 'OPTIONS') {
     return {

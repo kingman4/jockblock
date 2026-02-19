@@ -7,15 +7,28 @@
 
 const { getStore } = require('@netlify/blobs');
 
-// CORS headers
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Content-Type': 'application/json',
-  'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
-};
+// Allowed origins for CORS
+const ALLOWED_ORIGINS = [
+  'https://jockblock.com',
+  'https://www.jockblock.com',
+  'http://localhost:3000',
+  'http://localhost:8888'
+];
+
+function getCorsHeaders(origin) {
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json',
+    'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
+  };
+}
 
 exports.handler = async (event, context) => {
+  const origin = event.headers.origin || event.headers.Origin || '';
+  const headers = getCorsHeaders(origin);
+
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
