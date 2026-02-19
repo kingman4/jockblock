@@ -16,6 +16,19 @@ const SITE_URL = process.env.SITE_URL || 'https://jockblock.com';
 const MARKET_DATE = process.env.MARKET_DATE; // Format: YYYY-MM-DD
 
 /**
+ * Escape HTML special characters to prevent injection in emails
+ */
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
  * Check if we're currently in presale mode
  */
 function isPresaleMode() {
@@ -65,7 +78,7 @@ async function sendPresaleConfirmationEmail(customerEmail, customerName) {
             </h1>
           </div>
 
-          <p>Hi${customerName ? ` ${customerName}` : ''},</p>
+          <p>Hi${customerName ? ` ${escapeHtml(customerName)}` : ''},</p>
 
           <p><strong>Thank you for your pre-order!</strong></p>
 
@@ -133,7 +146,7 @@ async function sendReviewRequestEmail(customerEmail, customerName) {
             </h1>
           </div>
 
-          <p>Hi${customerName ? ` ${customerName}` : ''},</p>
+          <p>Hi${customerName ? ` ${escapeHtml(customerName)}` : ''},</p>
 
           <p>Thanks for trying Jock Block! We hope it's been helping with your symptoms.</p>
 

@@ -16,6 +16,19 @@ const SITE_URL = process.env.SITE_URL || 'https://jockblock.com';
 const REVIEW_APPROVAL_SECRET = process.env.REVIEW_APPROVAL_SECRET;
 
 /**
+ * Escape HTML special characters to prevent injection in emails
+ */
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
  * Send approval email to admin
  */
 async function sendApprovalEmail(review) {
@@ -55,10 +68,10 @@ async function sendApprovalEmail(review) {
 
           <div style="background: #f5f5f5; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
             <p style="margin: 0 0 10px 0;"><strong>Rating:</strong> <span style="color: #D4A853;">${stars}</span></p>
-            <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${review.name}</p>
-            <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${review.email || 'Not provided'}</p>
+            <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${escapeHtml(review.name)}</p>
+            <p style="margin: 0 0 10px 0;"><strong>Email:</strong> ${escapeHtml(review.email) || 'Not provided'}</p>
             <p style="margin: 0;"><strong>Review:</strong></p>
-            <p style="margin: 10px 0 0 0; padding: 10px; background: white; border-radius: 4px;">${review.review}</p>
+            <p style="margin: 10px 0 0 0; padding: 10px; background: white; border-radius: 4px;">${escapeHtml(review.review)}</p>
           </div>
 
           <div style="text-align: center;">

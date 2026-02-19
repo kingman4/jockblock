@@ -11,6 +11,19 @@ const { checkRateLimit, getClientIp } = require('./utils/rate-limiter');
 const REVIEW_APPROVAL_SECRET = process.env.REVIEW_APPROVAL_SECRET;
 const SITE_URL = process.env.SITE_URL || 'https://jockblock.com';
 
+/**
+ * Escape HTML special characters to prevent injection
+ */
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 exports.handler = async (event, context) => {
   // Only allow GET (from email links)
   if (event.httpMethod !== 'GET') {
@@ -68,7 +81,7 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'text/html' },
-      body: renderPage('Review Rejected', `Review from ${reviewData.name} has been rejected and will not be published.`, 'success')
+      body: renderPage('Review Rejected', `Review from ${escapeHtml(reviewData.name)} has been rejected and will not be published.`, 'success')
     };
   }
 
@@ -92,12 +105,12 @@ exports.handler = async (event, context) => {
       console.log('No existing reviews found, starting fresh');
     }
 
-    // Add new review
+    // Add new review (sanitize user content before storing)
     const newReview = {
       id: Date.now().toString(),
-      rating: parseInt(reviewData.rating),
-      name: reviewData.name.trim(),
-      review: reviewData.review.trim(),
+      rating: Math.min(5, Math.max(1, parseInt(reviewData.rating) || 1)),
+      name: escapeHtml(reviewData.name.trim()),
+      review: escapeHtml(reviewData.review.trim()),
       date: new Date().toISOString().split('T')[0],
       verified: !!reviewData.email
     };
@@ -112,7 +125,7 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'text/html' },
-      body: renderPage('Review Approved', `Review from ${reviewData.name} has been approved and is now live on the site.`, 'success')
+      body: renderPage('Review Approved', `Review from ${escapeHtml(reviewData.name)} has been approved and is now live on the site.`, 'success')
     };
 
   } catch (error) {
