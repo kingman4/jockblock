@@ -6,6 +6,7 @@
  */
 
 const { getStore } = require('@netlify/blobs');
+const { checkRateLimit, getClientIp } = require('./utils/rate-limiter');
 
 const REVIEW_APPROVAL_SECRET = process.env.REVIEW_APPROVAL_SECRET;
 const SITE_URL = process.env.SITE_URL || 'https://jockblock.com';
@@ -16,6 +17,17 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 405,
       body: 'Method not allowed'
+    };
+  }
+
+  // Rate limit: 10 approval attempts per IP per minute
+  const ip = getClientIp(event);
+  const { allowed } = await checkRateLimit(ip, 'approve-review', context, 10, 60000);
+  if (!allowed) {
+    return {
+      statusCode: 429,
+      headers: { 'Content-Type': 'text/html' },
+      body: renderPage('Too Many Requests', 'Please wait a moment before trying again.', 'error')
     };
   }
 

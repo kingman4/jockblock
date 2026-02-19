@@ -6,6 +6,7 @@
  */
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { checkRateLimit, getClientIp } = require('./utils/rate-limiter');
 
 // Product configuration
 const PRODUCT = {
@@ -43,6 +44,17 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       headers,
       body: ''
+    };
+  }
+
+  // Rate limit: 5 checkout attempts per IP per minute
+  const ip = getClientIp(event);
+  const { allowed } = await checkRateLimit(ip, 'checkout', context, 5, 60000);
+  if (!allowed) {
+    return {
+      statusCode: 429,
+      headers,
+      body: JSON.stringify({ error: 'Too many requests. Please try again later.' })
     };
   }
 

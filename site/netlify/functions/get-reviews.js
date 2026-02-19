@@ -6,6 +6,7 @@
  */
 
 const { getStore } = require('@netlify/blobs');
+const { checkRateLimit, getClientIp } = require('./utils/rate-limiter');
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
@@ -32,6 +33,17 @@ exports.handler = async (event, context) => {
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
+  }
+
+  // Rate limit: 30 requests per IP per minute
+  const ip = getClientIp(event);
+  const { allowed } = await checkRateLimit(ip, 'get-reviews', context, 30, 60000);
+  if (!allowed) {
+    return {
+      statusCode: 429,
+      headers,
+      body: JSON.stringify({ error: 'Too many requests', reviews: [] })
+    };
   }
 
   // Only allow GET
