@@ -15,7 +15,7 @@ test.describe('Reviews Section', () => {
   test('reviews section is visible when reviews exist', async ({ page }) => {
     const reviewsSection = page.locator('#reviews');
     await expect(reviewsSection).toBeVisible();
-    await expect(page.locator('.reviews-section .section-title')).toContainText('Reviews');
+    await expect(page.locator('.reviews-section .section-title')).toContainText('What folks are');
   });
 
   test('reviews grid displays review cards', async ({ page }) => {
