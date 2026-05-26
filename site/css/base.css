@@ -1,21 +1,25 @@
 /**
- * Base Styles
+ * Base Styles - BODEGA
  */
 
 body {
   font-family: var(--font-body);
   font-size: var(--text-base);
-  color: var(--color-white);
-  background-color: var(--color-primary);
+  color: var(--color-ink);
+  background-color: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  line-height: 1.2;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-transform: none;
 }
 
 h1 { font-size: var(--text-5xl); }
@@ -27,46 +31,50 @@ h6 { font-size: var(--text-lg); }
 
 p {
   margin-bottom: var(--space-4);
+  color: var(--color-ink);
+  line-height: 1.55;
+  max-width: 65ch;
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--color-cherry);
+  text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--color-accent-light);
+  color: var(--color-cherry-deep);
 }
 
 /* Focus states for accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 3px solid var(--color-cherry);
   outline-offset: 2px;
 }
 
 /* Selection */
 ::selection {
-  background-color: var(--color-accent);
-  color: var(--color-black);
+  background-color: var(--color-sulfur);
+  color: var(--color-ink);
 }
 
-/* Scrollbar styling */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-primary-light);
+  background: var(--color-cream-deep);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-gray-500);
+  background: var(--color-ink);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gray-300);
+  background: var(--color-cherry);
 }
 
 /* Utility Classes */

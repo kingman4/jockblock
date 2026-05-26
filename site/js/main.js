@@ -29,12 +29,31 @@ function formatMarketDate() {
   return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-// Product data
-const PRODUCT = {
-  id: 'jockblock-100ml',
-  name: 'Jock Block 100mL',
-  price: 19.99
+// Variant catalog — keys are SKUs. Prices here are display-only; the Stripe
+// checkout function re-validates against its own server-side prices.
+const VARIANTS = {
+  'jockblock-100ml': {
+    sku: 'jockblock-100ml',
+    name: 'Jock Block 100mL',
+    sizeLabel: '100mL',
+    price: 19.99,
+    volumeOz: '3.4 FL OZ',
+    volumeMl: '100 mL'
+  },
+  'jockblock-20ml': {
+    sku: 'jockblock-20ml',
+    name: 'Jock Block 20mL (Travel)',
+    sizeLabel: '20mL',
+    price: 9.99,
+    volumeOz: '0.68 OZ',
+    volumeMl: '20 mL'
+  }
 };
+
+const DEFAULT_SKU = 'jockblock-100ml';
+let selectedSku = DEFAULT_SKU;
+
+const formatPrice = (n) => `$${n.toFixed(2)}`;
 
 // DOM Elements
 const elements = {
@@ -61,10 +80,16 @@ const elements = {
   quantityInput: document.querySelector('[data-testid="item-quantity"]'),
   quantityIncrease: document.querySelector('[data-testid="quantity-increase"]'),
   quantityDecrease: document.querySelector('[data-testid="quantity-decrease"]'),
+  productPrice: document.querySelector('[data-testid="product-price"]'),
+  productTitleSize: document.querySelector('[data-testid="product-title-size"]'),
+  productImageVolumeOz: document.querySelector('[data-testid="product-image-volume-oz"]'),
+  productImageVolumeMl: document.querySelector('[data-testid="product-image-volume-ml"]'),
+  sizeOptions: document.querySelectorAll('[data-sku]'),
 
   // Sticky ATC
   stickyAtc: document.querySelector('[data-testid="sticky-atc"]'),
   stickyAddToCart: document.querySelector('[data-testid="sticky-add-to-cart"]'),
+  stickyAtcPrice: document.querySelector('[data-testid="sticky-atc-price"]'),
 
   // FAQ
   faqItems: document.querySelectorAll('.faq-item'),
@@ -78,6 +103,7 @@ const elements = {
  */
 function init() {
   setupMobileNav();
+  setupSizeSelector();
   setupCart();
   setupQuantitySelector();
   setupStickyAtc();
@@ -177,6 +203,52 @@ function setupMobileNav() {
 }
 
 /**
+ * Size Selector — toggles selected variant and refreshes displayed price/title
+ */
+function setupSizeSelector() {
+  const { sizeOptions } = elements;
+  if (!sizeOptions || sizeOptions.length === 0) return;
+
+  sizeOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const sku = opt.dataset.sku;
+      if (!VARIANTS[sku]) return;
+      selectedSku = sku;
+
+      sizeOptions.forEach(o => {
+        const isActive = o.dataset.sku === sku;
+        o.classList.toggle('active', isActive);
+        o.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      refreshSelectedVariantUI();
+    });
+  });
+
+  refreshSelectedVariantUI();
+}
+
+/**
+ * Reflect the selected variant in price, title, banded-box volumes, sticky ATC.
+ */
+function refreshSelectedVariantUI() {
+  const variant = VARIANTS[selectedSku];
+  if (!variant) return;
+
+  const {
+    productPrice, productTitleSize,
+    productImageVolumeOz, productImageVolumeMl,
+    stickyAtcPrice
+  } = elements;
+
+  if (productPrice) productPrice.textContent = formatPrice(variant.price);
+  if (productTitleSize) productTitleSize.textContent = variant.sizeLabel;
+  if (productImageVolumeOz) productImageVolumeOz.textContent = variant.volumeOz;
+  if (productImageVolumeMl) productImageVolumeMl.textContent = variant.volumeMl;
+  if (stickyAtcPrice) stickyAtcPrice.textContent = formatPrice(variant.price);
+}
+
+/**
  * Cart Functionality
  */
 function setupCart() {
@@ -198,18 +270,28 @@ function setupCart() {
   cartClose?.addEventListener('click', closeCart);
   cartOverlay?.addEventListener('click', closeCart);
 
-  // Add to cart
-  function handleAddToCart() {
+  // Any in-page link inside the drawer (e.g. empty-cart "Shop Now")
+  // should also close the drawer when followed.
+  cartDrawer?.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', closeCart);
+  });
+
+  // Add to cart — uses currently selected size variant
+  function handleAddToCart(event) {
+    const variant = VARIANTS[selectedSku];
+    if (!variant) return;
+
     const quantity = parseInt(elements.quantityInput?.value || '1', 10);
-    cart.addItem(PRODUCT.id, quantity, PRODUCT.price);
+    cart.addItem(variant.sku, quantity, variant.price);
     updateCartUI();
 
-    // Brief animation feedback
+    // Brief animation feedback on the clicked button
     const btn = event.currentTarget;
+    const originalText = btn.textContent;
     btn.textContent = 'Added!';
     btn.disabled = true;
     setTimeout(() => {
-      btn.textContent = 'Add to Cart';
+      btn.textContent = originalText;
       btn.disabled = false;
     }, 1000);
 
@@ -259,14 +341,17 @@ function renderCartItems() {
   const { cartItems } = elements;
   if (!cartItems) return;
 
-  cartItems.innerHTML = cart.items.map(item => `
-    <div class="cart-item" data-item-id="${item.id}">
+  cartItems.innerHTML = cart.items.map(item => {
+    const variant = VARIANTS[item.id];
+    const displayName = variant ? variant.name : item.id;
+    return `
+    <div class="cart-item" data-item-id="${item.id}" data-testid="cart-item-${item.id}">
       <div class="cart-item-image">
-        <span style="font-size: 10px; color: var(--color-accent);">JOCK<br>BLOCK</span>
+        <span style="font-size: 10px; font-family: var(--font-display); color: var(--color-cherry); line-height: 0.9; text-align: center;">JOCK<br>BLOCK</span>
       </div>
       <div class="cart-item-details">
-        <div class="cart-item-name">${PRODUCT.name}</div>
-        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+        <div class="cart-item-name">${displayName}</div>
+        <div class="cart-item-price">${formatPrice(item.price)}</div>
         <div class="cart-item-actions">
           <div class="quantity-selector" style="transform: scale(0.8); transform-origin: left;">
             <button class="quantity-btn cart-qty-decrease" aria-label="Decrease">−</button>
@@ -277,7 +362,8 @@ function renderCartItems() {
         </div>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   // Add event listeners for quantity buttons
   cartItems.querySelectorAll('.cart-item').forEach(itemEl => {
@@ -341,14 +427,20 @@ function setupStickyAtc() {
   const { addToCartBtn, stickyAtc } = elements;
   if (!addToCartBtn || !stickyAtc) return;
 
+  const heroCta = document.querySelector('.hero .btn-primary');
+  const watched = [addToCartBtn, heroCta].filter(Boolean);
+  const visibility = new Map(watched.map(el => [el, false]));
+
   const observer = new IntersectionObserver(
-    ([entry]) => {
-      stickyAtc.classList.toggle('visible', !entry.isIntersecting);
+    (entries) => {
+      for (const entry of entries) visibility.set(entry.target, entry.isIntersecting);
+      const anyVisible = Array.from(visibility.values()).some(Boolean);
+      stickyAtc.classList.toggle('visible', !anyVisible);
     },
     { threshold: 0, rootMargin: '-100px 0px 0px 0px' }
   );
 
-  observer.observe(addToCartBtn);
+  watched.forEach(el => observer.observe(el));
 }
 
 /**
@@ -478,6 +570,19 @@ function setupSmoothScroll() {
       }
     });
   });
+
+  // On the index page, intercept the header logo so it scroll-to-tops
+  // instead of reloading. On other pages the href="/" still navigates home.
+  const path = window.location.pathname;
+  const onIndex = path === '/' || path.endsWith('/index.html');
+  if (onIndex) {
+    document.querySelectorAll('.header-logo').forEach(logo => {
+      logo.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
 }
 
 /**
@@ -497,16 +602,18 @@ async function handleCheckout() {
     checkoutBtn.disabled = true;
     checkoutBtn.textContent = 'Processing...';
 
-    // Get total quantity from cart
-    const quantity = cart.getItemCount();
+    // Send the full cart line by line — server validates SKUs + prices.
+    const items = cart.items.map(item => ({
+      sku: item.id,
+      quantity: item.quantity
+    }));
 
-    // Call serverless function to create Stripe session
     const response = await fetch('/.netlify/functions/create-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ quantity })
+      body: JSON.stringify({ items })
     });
 
     if (!response.ok) {
@@ -627,4 +734,4 @@ setVH();
 document.addEventListener('DOMContentLoaded', init);
 
 // Export for testing
-export { cart, PRODUCT, updateCartUI };
+export { cart, VARIANTS, updateCartUI };

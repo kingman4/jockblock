@@ -51,7 +51,7 @@ describe('Cart', () => {
 
     test('adds different items separately', () => {
       cart.addItem('jockblock-100ml', 1, 19.99);
-      cart.addItem('jockblock-120ml', 1, 29.99);
+      cart.addItem('jockblock-20ml', 1, 9.99);
 
       expect(cart.items).toHaveLength(2);
     });
@@ -155,9 +155,10 @@ describe('Cart', () => {
 
     test('calculates total for multiple items', () => {
       cart.addItem('jockblock-100ml', 2, 19.99);
-      cart.addItem('jockblock-120ml', 1, 29.99);
+      cart.addItem('jockblock-20ml', 1, 9.99);
 
-      expect(cart.getTotal()).toBeCloseTo(69.97, 2);
+      // 2 × $19.99 + 1 × $9.99
+      expect(cart.getTotal()).toBeCloseTo(49.97, 2);
     });
 
     test('handles floating point precision', () => {
@@ -182,9 +183,20 @@ describe('Cart', () => {
 
     test('returns total quantity across all items', () => {
       cart.addItem('jockblock-100ml', 2, 19.99);
-      cart.addItem('jockblock-120ml', 3, 29.99);
+      cart.addItem('jockblock-20ml', 3, 9.99);
 
       expect(cart.getItemCount()).toBe(5);
+    });
+
+    test('treats each SKU as its own cart line', () => {
+      // Adding the same SKU twice merges; adding a different SKU stays separate
+      cart.addItem('jockblock-100ml', 1, 19.99);
+      cart.addItem('jockblock-100ml', 2, 19.99);
+      cart.addItem('jockblock-20ml', 1, 9.99);
+
+      expect(cart.items).toHaveLength(2);
+      expect(cart.getItem('jockblock-100ml').quantity).toBe(3);
+      expect(cart.getItem('jockblock-20ml').quantity).toBe(1);
     });
   });
 
@@ -208,7 +220,7 @@ describe('Cart', () => {
   describe('clear', () => {
     test('empties cart', () => {
       cart.addItem('jockblock-100ml', 1, 19.99);
-      cart.addItem('jockblock-120ml', 2, 29.99);
+      cart.addItem('jockblock-20ml', 2, 9.99);
       cart.clear();
 
       expect(cart.items).toHaveLength(0);

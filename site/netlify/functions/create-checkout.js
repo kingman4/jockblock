@@ -8,14 +8,25 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { checkRateLimit, getClientIp } = require('./utils/rate-limiter');
 
-// Product configuration
-const PRODUCT = {
-  name: 'Jock Block Antifungal Spray',
-  description: 'Homeopathic antifungal spray with Sulfur 6X HPUS - 100mL',
-  price: parseInt(process.env.STRIPE_PRICE_AMOUNT) || 1999, // cents
-  currency: 'usd',
-  image: 'https://jockblock.com/images/product-main.png' // Update with actual image URL
+// Server-side variant catalog — source of truth for pricing.
+// Client-submitted prices are ignored; we look up by SKU here.
+const CURRENCY = 'usd';
+const VARIANTS = {
+  'jockblock-100ml': {
+    name: 'Jock Block 100mL',
+    description: 'Homeopathic topical sulfur spray, 100mL / 3.4 fl oz. NDC 87627-001-100.',
+    price: parseInt(process.env.STRIPE_PRICE_AMOUNT_100ML, 10) || 1999,
+    image: 'https://jockblock.com/images/product-100ml.png'
+  },
+  'jockblock-20ml': {
+    name: 'Jock Block 20mL (Travel)',
+    description: 'Homeopathic topical sulfur spray, 20mL / 0.68 oz travel size. NDC 87627-001-020.',
+    price: parseInt(process.env.STRIPE_PRICE_AMOUNT_20ML, 10) || 999,
+    image: 'https://jockblock.com/images/product-20ml.png'
+  }
 };
+
+const MAX_QUANTITY_PER_LINE = 10;
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
@@ -68,11 +79,50 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    // Parse request body
-    const { quantity = 1 } = JSON.parse(event.body || '{}');
+    // Parse request body. Expected shape:
+    //   { items: [{ sku: 'jockblock-100ml', quantity: 2 }, ...] }
+    // Legacy shape { quantity: N } is treated as a single 100mL line.
+    const body = JSON.parse(event.body || '{}');
+    const rawItems = Array.isArray(body.items)
+      ? body.items
+      : [{ sku: 'jockblock-100ml', quantity: body.quantity ?? 1 }];
 
-    // Validate quantity
-    const validQuantity = Math.min(Math.max(parseInt(quantity) || 1, 1), 10);
+    // Validate every line against the server-side catalog.
+    const lineItems = [];
+    for (const raw of rawItems) {
+      const variant = VARIANTS[raw && raw.sku];
+      if (!variant) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: `Unknown product SKU: ${raw && raw.sku}` })
+        };
+      }
+      const qty = Math.min(
+        Math.max(parseInt(raw.quantity, 10) || 1, 1),
+        MAX_QUANTITY_PER_LINE
+      );
+      lineItems.push({
+        price_data: {
+          currency: CURRENCY,
+          product_data: {
+            name: variant.name,
+            description: variant.description,
+            images: [variant.image]
+          },
+          unit_amount: variant.price
+        },
+        quantity: qty
+      });
+    }
+
+    if (lineItems.length === 0) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Cart is empty' })
+      };
+    }
 
     // Get the site URL for redirects
     const siteUrl = process.env.SITE_URL || `https://${event.headers.host}`;
@@ -80,20 +130,7 @@ exports.handler = async (event, context) => {
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: PRODUCT.currency,
-            product_data: {
-              name: PRODUCT.name,
-              description: PRODUCT.description,
-              images: [PRODUCT.image]
-            },
-            unit_amount: PRODUCT.price
-          },
-          quantity: validQuantity
-        }
-      ],
+      line_items: lineItems,
       mode: 'payment',
       success_url: `${siteUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/?canceled=true`,

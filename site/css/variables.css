@@ -1,42 +1,61 @@
 /**
- * Jock Block Design System - CSS Variables
- * Colors derived from product label: black, mint green, gold
+ * Jock Block Design System - CSS Variables (BODEGA direction)
+ * Friendly corner-store OTC: candy yellow, cherry red, indigo, cream, ink
  */
 
 :root {
-  /* Primary - Dark Background (from label) */
-  --color-primary: #0A0A0A;
-  --color-primary-light: #1A1A1A;
-  --color-primary-dark: #000000;
+  /* === BODEGA palette === */
+  --color-sulfur: #F6C829;
+  --color-sulfur-deep: #D9A920;
+  --color-cherry: #E23D28;
+  --color-cherry-deep: #A52817;
+  --color-indigo: #1A3A73;
+  --color-indigo-light: #7BA3E0;
+  --color-cream: #F5ECD9;
+  --color-cream-deep: #ECE1C5;
+  --color-ink: #181410;
 
-  /* Accent - Mint Green (from label "JOCK" text & tagline box) */
-  --color-accent: #00E676;
-  --color-accent-light: #69F0AE;
-  --color-accent-dark: #00C853;
-  --color-accent-glow: rgba(0, 230, 118, 0.3);
+  /* === Semantic role mapping (legacy token names point to new roles) === */
+  /* Page surfaces */
+  --color-primary: var(--color-cream);
+  --color-primary-light: var(--color-cream-deep);
+  --color-primary-dark: var(--color-ink);
 
-  /* Secondary - Gold/Amber (from label "RELIEVES:" text) */
-  --color-secondary: #D4A853;
-  --color-secondary-light: #E8C87A;
+  /* Accent = cherry (CTAs, highlights) */
+  --color-accent: var(--color-cherry);
+  --color-accent-light: #F45B47;
+  --color-accent-dark: var(--color-cherry-deep);
+  --color-accent-glow: rgba(226, 61, 40, 0.22);
 
-  /* Neutral */
-  --color-white: #FFFFFF;
-  --color-off-white: #F5F5F5;
-  --color-gray-100: #E0E0E0;
-  --color-gray-300: #9E9E9E;
-  --color-gray-500: #757575;
-  --color-gray-700: #424242;
-  --color-black: #0A0A0A;
+  /* Secondary = sulfur (eyebrow / section labels) */
+  --color-secondary: var(--color-sulfur);
+  --color-secondary-light: var(--color-sulfur-deep);
+
+  /* Tertiary = indigo (cool counterweight) */
+  --color-tertiary: var(--color-indigo);
+
+  /* Neutrals - now ink-on-cream (legacy "white" tokens repurposed as text colors) */
+  --color-white: var(--color-ink);
+  --color-off-white: var(--color-cream-deep);
+  --color-gray-100: #2A2520;
+  --color-gray-300: #5A5147;
+  --color-gray-400: #6E6557;
+  --color-gray-500: #8A8175;
+  --color-gray-600: #A39A8B;
+  --color-gray-700: rgba(24, 20, 16, 0.18);
+  --color-black: var(--color-ink);
 
   /* Semantic */
-  --color-success: #00E676;
-  --color-error: #FF5252;
-  --color-warning: #D4A853;
+  --color-success: #1F7A3F;
+  --color-error: #B91C1C;
+  --color-warning: var(--color-sulfur-deep);
 
-  /* Typography */
-  --font-heading: 'Bebas Neue', 'Oswald', sans-serif;
-  --font-subheading: 'Inter', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* === Typography === */
+  --font-display: 'Alfa Slab One', 'Roboto Slab', Georgia, serif;
+  --font-heading: 'Alfa Slab One', 'Roboto Slab', Georgia, serif;
+  --font-subheading: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Type Scale - Mobile First */
   --text-xs: 0.75rem;
@@ -46,9 +65,9 @@
   --text-xl: 1.25rem;
   --text-2xl: 1.5rem;
   --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
+  --text-4xl: 2.5rem;
   --text-5xl: 3rem;
-  --text-hero: 2rem;
+  --text-hero: 2.75rem;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -65,21 +84,21 @@
   --space-24: 6rem;
 
   /* Border Radius */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 20px var(--color-accent-glow);
+  /* Shadows - chunky ink press, no neon glow */
+  --shadow-sm: 0 1px 0 rgba(24, 20, 16, 0.10);
+  --shadow-md: 0 4px 0 var(--color-ink);
+  --shadow-lg: 0 8px 0 var(--color-ink);
+  --shadow-glow: 0 0 0 3px var(--color-accent-glow);
 
   /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 350ms ease;
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 350ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Z-index */
   --z-dropdown: 10;
@@ -90,8 +109,9 @@
 
   /* Layout */
   --max-width: 1200px;
-  --header-height: 64px;
-  --header-height-mobile: 56px;
+  --header-height: 72px;
+  --header-height-mobile: 60px;
+  --ribbon-height: 54px;
 
   /* Touch targets */
   --touch-target-min: 44px;
@@ -104,9 +124,9 @@
 /* Desktop type scale */
 @media (min-width: 1024px) {
   :root {
-    --text-hero: 3.5rem;
-    --text-5xl: 3.5rem;
-    --text-4xl: 2.5rem;
-    --text-3xl: 2rem;
+    --text-hero: 4.5rem;
+    --text-5xl: 4rem;
+    --text-4xl: 3rem;
+    --text-3xl: 2.25rem;
   }
 }

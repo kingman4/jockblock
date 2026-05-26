@@ -11,7 +11,9 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Archivo:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/reset.css">
@@ -25,40 +27,37 @@
 
   <style>
     .review-page {
-      min-height: calc(100vh - var(--header-height-mobile) - 200px);
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: var(--space-8) var(--space-4);
-    }
-
-    @media (min-width: 768px) {
-      .review-page {
-        min-height: calc(100vh - var(--header-height-desktop) - 200px);
-      }
+      padding: var(--space-12) var(--space-4) var(--space-16);
     }
 
     .review-card {
-      background: var(--color-primary-light);
-      border: 1px solid var(--color-gray-700);
-      border-radius: 12px;
+      background: var(--color-cream);
+      border: 2px solid var(--color-ink);
+      border-radius: var(--radius-md);
       padding: var(--space-8);
-      max-width: 500px;
+      max-width: 520px;
       width: 100%;
+      box-shadow: var(--shadow-md);
     }
 
     .review-title {
-      font-family: var(--font-heading);
-      font-size: var(--text-2xl);
-      color: var(--color-white);
-      margin-bottom: var(--space-2);
+      font-family: var(--font-display);
+      font-size: var(--text-3xl);
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+      margin-bottom: var(--space-3);
+      margin-top: var(--space-1);
       text-align: center;
     }
 
     .review-subtitle {
-      color: var(--color-gray-400);
+      color: var(--color-ink);
       text-align: center;
-      margin-bottom: var(--space-6);
+      margin: 0 auto var(--space-6);
+      max-width: 36ch;
     }
 
     .star-rating {
@@ -71,7 +70,7 @@
     .star-btn {
       background: none;
       border: none;
-      font-size: 32px;
+      font-size: 36px;
       cursor: pointer;
       color: var(--color-gray-600);
       transition: color 0.15s ease, transform 0.15s ease;
@@ -83,7 +82,7 @@
     }
 
     .star-btn.active {
-      color: var(--color-secondary);
+      color: var(--color-cherry);
     }
 
     .star-btn:focus {
@@ -140,8 +139,9 @@
   <header class="header">
     <div class="header-inner">
       <!-- Logo -->
-      <a href="/" class="header-logo" style="margin: 0 auto;">
-        <span>JOCK</span> BLOCK
+      <a href="/" class="header-logo" style="margin: 0 auto;" aria-label="Jock Block home">
+        <span>JOCK</span>
+        <span>BLOCK</span>
       </a>
     </div>
   </header>
